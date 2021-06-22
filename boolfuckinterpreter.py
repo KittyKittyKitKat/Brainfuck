@@ -61,9 +61,3 @@ class BoolFuckInterpreter(BFI):
             bits_str = '0b' + ''.join(str(bit) for bit in bits)
             output += chr(int(bits_str, 2))
         print(output, end='')
-
-
-if __name__ == '__main__':
-    i_stream = 'ab' + chr(4)
-    bf = BoolFuckInterpreter.from_file('program.bf', input_stream=i_stream)
-    bf.run_program()

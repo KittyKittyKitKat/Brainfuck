@@ -193,12 +193,3 @@ class BrainfuckInterpreter():
         while self.program_counter < program_len:
             self.command_map[self.code[self.program_counter]]()
             self.program_counter += 1
-
-
-if __name__ == '__main__':
-    bf = BrainfuckInterpreter.from_file('15-puzzle.bf')
-    try:
-        bf.run_program()
-    finally:
-        print('\n' + '-' * 50)
-        print(repr(bf.stdout_stream))
