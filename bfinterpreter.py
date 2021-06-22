@@ -134,7 +134,6 @@ class BrainfuckInterpreter():
         UTF8 = True
 
         if self.extended_uncode_support and c > 0x7f and len(self.stdout_stream) and UTF8:
-            cc = None
             n = 1
             v = c & 0x3f
             h = 0x80
