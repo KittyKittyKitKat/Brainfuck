@@ -133,30 +133,25 @@ class BrainfuckInterpreter():
         c = self.tape[self.pointer]
         UTF8 = True
 
-        def not_utf8() -> None:
-            nonlocal c
-            nonlocal UTF8
-            while c > 0x7f and len(self.stdout_stream) and UTF8:
-                cc = None
-                n = 1
-                v = c & 0x3f
-                h = 0x80
-                while True:
-                    cc = ord(self.stdout_stream[len(self.stdout_stream) - n]) or 0
-                    if cc > 0xff or not (cc and 0x80):
-                        UTF8 = False
-                        return
-                    h |= h >> 1
-                    if (cc & h) == h and not(cc & ((h >> 1) & (~h))):
-                        c = v | (cc & ~h) << (n * 6)
-                        self.stdout_stream = self.stdout_stream[:len(self.stdout_stream) - n]
-                        break
-                    elif cc & 0x80 and not(cc & 0x40) and n < 5:
-                        v |= (cc & 0x3f) << (n * 6)
-                    n += 1
-                break
-        if self.extended_uncode_support:
-            not_utf8()
+        if self.extended_uncode_support and c > 0x7f and len(self.stdout_stream) and UTF8:
+            cc = None
+            n = 1
+            v = c & 0x3f
+            h = 0x80
+            while True:
+                cc = ord(self.stdout_stream[len(self.stdout_stream) - n]) or 0
+                if cc > 0xff or not (cc and 0x80):
+                    UTF8 = False
+                    break
+                h |= h >> 1
+                if (cc & h) == h and not(cc & ((h >> 1) & (~h))):
+                    c = v | (cc & ~h) << (n * 6)
+                    self.stdout_stream = self.stdout_stream[:len(self.stdout_stream) - n]
+                    break
+                elif cc & 0x80 and not(cc & 0x40) and n < 5:
+                    v |= (cc & 0x3f) << (n * 6)
+                n += 1
+
         self.stdout_stream += chr(c)
         if UTF8:
             print(chr(c), end='')
