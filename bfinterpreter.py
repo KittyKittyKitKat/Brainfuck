@@ -22,7 +22,7 @@ class BrainfuckInterpreter():
                  tape_wrapping: bool = False,
                  max_tape_size: Union[int, float] = 32768,
                  eof_behavior: EOF_BEHAVIOUR = EOF_BEHAVIOUR.NO_CHANGE,
-                 extended_uncode_support: bool = True) -> None:
+                 extended_unicode_support: bool = True) -> None:
         if eof_behavior not in EOF_BEHAVIOUR:
             raise ValueError('Invalid EOF behaviour specified')
         self.code = BrainfuckInterpreter.strip_code(code)
@@ -42,7 +42,7 @@ class BrainfuckInterpreter():
         if self.max_tape_size == INFINTIY:
             self.tape_wrapping = False
         self.eof_behavior = eof_behavior
-        self.extended_uncode_support = extended_uncode_support
+        self.extended_unicode_support = extended_unicode_support
         self.tape = [0] * (self.max_tape_size if self.tape_wrapping else 1)  # type: ignore
         self.pointer = 0
         self.program_counter = 0
@@ -133,7 +133,7 @@ class BrainfuckInterpreter():
         c = self.tape[self.pointer]
         UTF8 = True
 
-        if self.extended_uncode_support and c > 0x7f and len(self.stdout_stream) and UTF8:
+        if self.extended_unicode_support and c > 0x7f and len(self.stdout_stream) and UTF8:
             n = 1
             v = c & 0x3f
             h = 0x80
